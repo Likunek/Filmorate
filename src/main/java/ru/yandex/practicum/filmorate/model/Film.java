@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -14,11 +13,11 @@ import java.time.LocalDate;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class Film extends BaseUnit {
+@EqualsAndHashCode(of = {"id"})
+public class Film {
+    private Long id;
 
     @NotBlank(message = "name cannot be empty")
-//    @Size(min = 1, max = 20, message = "name cannot be empty")
     private String name;
     @Size(min = 1, max = 200, message = "The value of the field or property must be an integer value lower than or equal to the number in the value element.")
     private String description;

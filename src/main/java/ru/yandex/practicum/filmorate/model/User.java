@@ -8,14 +8,13 @@ import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-public class User extends BaseUnit {
-
+@EqualsAndHashCode(of = {"id"})
+public class User {
+    private Long id;
     @NotEmpty
     @Email(message = "Email should be valid")
     private String email;
