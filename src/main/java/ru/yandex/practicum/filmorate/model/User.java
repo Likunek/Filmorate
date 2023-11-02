@@ -8,6 +8,8 @@ import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @SuperBuilder
@@ -20,9 +22,8 @@ public class User {
     private String email;
     @NotBlank(message = "login cannot be empty")
     private String login;
-
     private String name;
     @Past(message = "wrong birthday date")
     private LocalDate birthday;
-
+    private Set<Long> friends = new HashSet<>();
 }
