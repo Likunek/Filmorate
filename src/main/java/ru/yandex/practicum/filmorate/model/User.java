@@ -26,4 +26,5 @@ public class User {
     @Past(message = "wrong birthday date")
     private LocalDate birthday;
     private Set<Long> friends = new HashSet<>();
+
 }

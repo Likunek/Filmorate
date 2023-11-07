@@ -26,8 +26,9 @@ public class Film implements Comparable<Film> {
     private LocalDate releaseDate;
     @Min(value = 1, message = "duration can't be less than 1")
     private int duration;
+    private Set<Genre> genres = new HashSet<>();
     private Set<Long> likes = new HashSet<>();
-
+    private Rating rating;
     @Override
     public int compareTo(Film o) {
         return o.getLikes().size() - this.getLikes().size();
