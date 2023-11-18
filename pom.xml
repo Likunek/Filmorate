@@ -41,7 +41,6 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
             <version>3.0.4</version>
         </dependency>
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
         <dependency>
             <groupId>org.e-hoffman.testing</groupId>
             <artifactId>ResourceUtils</artifactId>
@@ -58,16 +57,19 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.hibernate.validator</groupId>-->
-<!--			<artifactId>hibernate-validator</artifactId>-->
-<!--			<version>8.0.1.Final</version>-->
-<!--			<scope>test</scope>-->
-<!--			</dependency>-->
-<!--		<dependency>-->
-<!--		<groupId>jakarta.validation</groupId>-->
-<!--		<artifactId>jakarta.validation-api</artifactId>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+		</dependency>
     </dependencies>
 
 	<build>

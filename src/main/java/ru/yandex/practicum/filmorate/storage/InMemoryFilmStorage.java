@@ -17,6 +17,11 @@ public class InMemoryFilmStorage implements FilmStorage {
     private long generatedId;
 
     @Override
+    public Film getFilm(Long id) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Film create(Film film) {
         log.info("Creating film {}", film);
         film.setId(++generatedId);
@@ -35,7 +40,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> getAll() {
+    public List<Film> getAllFilms() {
         return new ArrayList<>(storage.values());
     }
 }

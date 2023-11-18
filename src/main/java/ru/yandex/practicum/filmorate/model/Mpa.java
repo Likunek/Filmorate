@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @SuperBuilder
 @NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
-public class Genre {
+public class Mpa {
 
     private Long id;
     @NotBlank

@@ -4,13 +4,14 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @SuperBuilder
@@ -26,11 +27,26 @@ public class Film implements Comparable<Film> {
     private LocalDate releaseDate;
     @Min(value = 1, message = "duration can't be less than 1")
     private int duration;
-    private Set<Genre> genres = new HashSet<>();
+    @JsonIgnore
+    private long rate = 0;
+    @NotNull
+    private Mpa mpa;
+    private LinkedHashSet<Genre> genres = new LinkedHashSet<>() ;
     private Set<Long> likes = new HashSet<>();
-    private Rating rating;
     @Override
     public int compareTo(Film o) {
         return o.getLikes().size() - this.getLikes().size();
     }
+
+    public void addLike(long userId){
+        likes.add(userId);
+        rate = likes.size();
+    }
+
+    public void removeLike(long userId){
+        likes.remove(userId);
+        rate = likes.size();
+    }
+
 }
+

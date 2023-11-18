@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.DataNotFoundException;
 import ru.yandex.practicum.filmorate.model.User;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +17,11 @@ public class InMemoryUserStorage implements UserStorage {
 
     private final Map<Long, User> storage = new HashMap<>();
     private long generatedId;
+
+    @Override
+    public User getUser(Long id) {
+        throw new UnsupportedOperationException();
+    }
 
     @Override
     public User create(User user) {

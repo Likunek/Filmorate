@@ -2,15 +2,16 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.LikesStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -18,61 +19,66 @@ public class FilmService {
 
     FilmStorage filmStorage;
     UserStorage userStorage;
+    LikesStorage likesStorage;
+    private long generatedId;
 
     @Autowired
-    public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
+    public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage,
+                       @Qualifier("userDbStorage") UserStorage userStorage,  LikesStorage likesStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
+        this.likesStorage = likesStorage;
     }
 
+    public Film create(Film film){
+        film.setId(++generatedId);
+       Film filmNew = filmStorage.create(film);
+        log.info("Creating film {}", filmNew);
+        return filmNew;
+    }
+    public Film update(Film film){
+        Film filmNew = filmStorage.update(film);
+        if(filmNew!= null){
+            log.info("update film {}", filmNew);
+            return filmNew;
+        }
+        throw new FilmNotFoundException("id не найден");
+    }
+
+
     public Film getFilm(Long id) {
-        for (Film film : filmStorage.getAll()) {
-            if (film.getId().equals(id)) {
-                log.info("get film: {}", film);
-                return film;
-            }
+        Film film = filmStorage.getFilm(id);
+        if(film!= null){
+            log.info("Get film {}", film);
+            return film;
         }
         throw new FilmNotFoundException("id не найден");
     }
 
     public Film addLike(Long id, Long filmId) {
-        for (Film film : filmStorage.getAll()) {
-            if (film.getId().equals(filmId)) {
-                film.getLikes().add(id);
-                log.info("add a like to the movie: {}", film);
-                return film;
-            }
+        Film film = filmStorage.getFilm(filmId);
+        User user = userStorage.getUser(id);
+        if(film!= null && user!= null){
+            log.info("add like {}", film);
+            likesStorage.addLike(id, filmId);
+            return film;
         }
         throw new FilmNotFoundException("id не найден");
     }
 
     public void deleteLike(Long id, Long filmId) {
-        byte found = 0;
-        for (User user : userStorage.getAll()) {
-            if (user.getId().equals(id)) {
-                log.info("user found: {}", user);
-                found++;
-            }
-        }
-        for (Film film : filmStorage.getAll()) {
-            if (film.getId().equals(filmId)) {
-                log.info("remove a like from a movie: {}", film);
-                film.getLikes().remove(id);
-                found++;
-            }
-        }
-        if (found != 2) {
+        Film film = filmStorage.getFilm(filmId);
+        User user = userStorage.getUser(id);
+        if(film!= null && user!= null){
+            log.info("delete like {}", film);
+            likesStorage.deleteLike(id, filmId);
+        }else {
             throw new FilmNotFoundException("id не найден");
         }
     }
 
-    public List<Film> getBestFilms(String count) {
-        List<Film> films = new ArrayList<>(filmStorage.getAll());
-        Collections.sort(films);
-        log.info("sort film: {}", films);
-        return films.stream()
-                .limit(Integer.parseInt(count))
-                .collect(Collectors.toList());
+    public List<Film> getBestFilms(int count) {
+        return likesStorage.getBestFilms(count);
     }
 }
 
